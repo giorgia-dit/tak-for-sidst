@@ -1,0 +1,17 @@
+{
+  "name": "tak-for-sidst",
+  "private": true,
+  "scripts": {
+    "build:css": "sass --silence-deprecation=import --load-path=node_modules --quiet-deps --style=compressed static/scss/main.scss static/css/main.css",
+    "watch:css": "sass --silence-deprecation=import --load-path=node_modules --quiet-deps --watch static/scss/main.scss static/css/main.css"
+  },
+  "devDependencies": {
+    "sass": "^1.94.2"
+  },
+  "dependencies": {
+    "bootstrap": "^5.3.8"
+  },
+  "overrides": {
+    "chokidar": "^4.0.3"
+  }
+}
