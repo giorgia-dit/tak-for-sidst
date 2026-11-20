@@ -1,0 +1,14 @@
+@import url('https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Inter+Tight:ital,wght@0,100..900;1,100..900&display=swap');
+
+
+/* families */
+$font-serif: 'Gowun Batang', Georgia, serif;
+$font-sans: 'Inter Tight', system-ui, sans-serif;
+
+
+/* bs-variables */
+$font-family-sans-serif: $font-sans;
+$headings-font-family: $font-serif;
+$headings-font-weight: 400;
+$display-font-family: $font-serif;
+$display-font-weight: 400;
