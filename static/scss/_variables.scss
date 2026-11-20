@@ -1,0 +1,74 @@
+/* samples */
+$bg: rgb(62, 45, 34);
+$surface: rgb(81, 61, 49);
+$surface-2: rgb(102, 79, 66);
+$border: rgb(122, 97, 80);
+$text-muted: rgb(195, 175, 143);
+$text: rgb(233, 220, 192);
+$brick-red: rgb(217, 87, 63);
+$red-deep: rgb(128, 40, 26);
+$dusty-pink: rgb(217, 140, 140);
+$avocado: rgb(149, 160, 80);
+$moss: rgb(110, 138, 74);
+$pine-deep: rgb(44, 66, 32);
+$burnt-orange: rgb(217, 128, 62);
+$mustard: rgb(214, 167, 69);
+$faded-petrol: rgb(106, 149, 174);
+
+$snak: $mustard;
+$gejst: $avocado;
+$undren: $dusty-pink;
+$minder: $faded-petrol;
+
+
+/*
+bs-variables [data-bs-theme="dark"]
+*/
+$body-bg-dark: $bg;
+$body-color-dark: $text;
+$body-secondary-color-dark: $text-muted;
+$body-secondary-bg-dark: $surface;
+$body-tertiary-bg-dark: $surface-2;
+$border-color-dark: $border;
+
+$primary: $mustard;
+$secondary: $border;
+$success: $moss;
+$warning: $burnt-orange;
+$danger: $brick-red;
+$light: $text;
+$dark: $bg;
+
+
+/*
+overrides bs-own $theme-colors.
+each key creates classes like .text-<key>, .bg-<key>, .btn-<key>.
+*/
+$theme-colors: (
+  'primary': $primary,
+  'secondary': $secondary,
+  'success': $success,
+  'warning': $warning,
+  'danger': $danger,
+  'light': $light,
+  'dark': $dark,
+  'bg': $bg,
+  'surface': $surface,
+  'surface-2': $surface-2,
+  'border': $border,
+  'text-muted': $text-muted,
+  'text': $text,
+  'brick-red': $brick-red,
+  'red-deep': $red-deep,
+  'dusty-pink': $dusty-pink,
+  'avocado': $avocado,
+  'moss': $moss,
+  'pine-deep': $pine-deep,
+  'burnt-orange': $burnt-orange,
+  'mustard': $mustard,
+  'faded-petrol': $faded-petrol,
+  'snak': $snak,
+  'gejst': $gejst,
+  'undren': $undren,
+  'minder': $minder,
+);

@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 13.26 13.26">
+  <defs>
+    <symbol id="type-balance" data-name="type-balance" viewBox="0 0 13.26 13.26">
+      <path d="M6.63,5.93,3.45,2.75a4.49,4.49,0,0,1,6.36,0h0Z" fill="#d6a745"/>
+      <path d="M7.33,6.63l3.18-3.18a4.49,4.49,0,0,1,0,6.36h0Z" fill="#95a050"/>
+      <path d="M6.63,7.33l3.18,3.18a4.49,4.49,0,0,1-6.36,0h0Z" fill="#d98c8c"/>
+      <path d="M5.93,6.63,2.75,9.81a4.49,4.49,0,0,1,0-6.36h0Z" fill="#6a95ae"/>
+      <circle cx="6.63" cy="6.63" r="6.38" fill="none" stroke="#e9dcc0" stroke-width="0.5"/>
+    </symbol>
+  </defs>
+  <title>balance-circle</title>
+  <g id="Livello_2" data-name="Livello 2">
+    <g id="elements">
+      <use width="13.26" height="13.26" xlink:href="#type-balance"/>
+    </g>
+  </g>
+</svg>

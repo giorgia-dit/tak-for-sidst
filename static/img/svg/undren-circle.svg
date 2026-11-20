@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 13.26 13.26">
+  <defs>
+    <symbol id="type-undren" data-name="type-undren" viewBox="0 0 13.26 13.26">
+      <circle cx="6.63" cy="6.63" r="6.38" fill="none" stroke="#e9dcc0" stroke-miterlimit="10" stroke-width="0.5"/>
+      <path d="M6.63,2C6.87,4.66,7.51,6,8.84,6.63c-1.33.59-2,2-2.21,4.68C6.38,8.6,5.74,7.22,4.41,6.63,5.74,6,6.38,4.66,6.63,2Z" fill="none" stroke="#e6878a" stroke-linecap="round" stroke-linejoin="round" stroke-width="0.5"/>
+    </symbol>
+  </defs>
+  <title>undren-circle</title>
+  <g id="Livello_2" data-name="Livello 2">
+    <g id="elements">
+      <use width="13.26" height="13.26" xlink:href="#type-undren"/>
+    </g>
+  </g>
+</svg>
