@@ -10,3 +10,20 @@
     </button>
   {% endfor %}
 </div>
+
+{% if show_intro %}
+  <div id="intro" class="position-fixed top-0 start-0 w-100 h-100 z-3 bg-body d-flex flex-column justify-content-center align-items-center text-center bg-opacity-75 p-4 fade show"
+      role="button" tabindex="0">
+    <h1 class="display-3">tak for sidst</h1>
+    <p class="text-body-secondary">grazie per l'ultima volta</p>
+
+    {% if table_data.card_seat and not table_data.card_previous_seen_at %}
+      <p class="mt-4" style="max-width: 32rem;">
+        Ogni volta che tocchi la tua carta ti siedi a tavola, e i quattro fili crescono dei tuoi punti.
+        Vale un tocco al giorno: torna quando vuoi a vedere chi è passato.
+      </p>
+    {% endif %}
+
+    <p class="small text-body-secondary mt-5">tocca per entrare</p>
+  </div>
+{% endif %}

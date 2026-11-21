@@ -1,6 +1,6 @@
 from django.views.generic import DetailView, ListView
 
-from .models import Card
+from .models import Card, Touch
 from .viewmixins import TableDataContextMixin
 
 __all__ = [
@@ -25,6 +25,15 @@ class CardDetailView(TableDataContextMixin, DetailView):
         data['card_seat'] = self.object.seat
         data['card_previous_seen_at'] = self.object.last_seen_at
         return data
+
+    def get_context_data(self, **kwargs): # TODO review
+        context = super().get_context_data(**kwargs)
+        previous_seen_at = context['table_data']['card_previous_seen_at']
+        context['show_intro'] = (
+            previous_seen_at is None
+            or Touch.objects.filter(touched_at__gt=previous_seen_at).exists()
+        )
+        return context
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
