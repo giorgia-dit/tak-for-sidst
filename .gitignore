@@ -1,8 +1,23 @@
+# python
 venv/
 __pycache__/
 *.pyc
+
+# django
 db.sqlite3
-.env
 staticfiles/
+.env
+
+# data
+table/fixtures/
+
+# front-end
 node_modules/
+
+# design-sources
+*.ai
+*.ase
+*.pdf
+
+# OS
 .DS_Store

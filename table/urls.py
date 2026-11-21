@@ -1,7 +1,10 @@
 from django.urls import path
 
-from . import views
+from .views import *
+
+app_name = 'table'
 
 urlpatterns = [
-    path("", views.IndexView.as_view(), name="index"),
+    path('', CardListView.as_view(), name='card_list'),
+    path('<str:token>/', CardDetailView.as_view(), name='card_detail'),
 ]

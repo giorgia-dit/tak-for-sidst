@@ -13,6 +13,7 @@ import os
 import dj_database_url
 
 from pathlib import Path
+from datetime import date
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -140,3 +141,6 @@ if not DEBUG:
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Game end date - touches are recorded until the day before
+GAME_END = date.fromisoformat(os.environ.get('GAME_END', '2027-01-06'))

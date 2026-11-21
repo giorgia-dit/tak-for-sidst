@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <main class="container py-5">
+    <h1 class="display-4">{{ card.name|lower }}</h1>
+
+    {% if previous_seen_at %}
+      <p class="text-body-secondary">ultima visita: {{ previous_seen_at }}</p>
+    {% else %}
+      <p class="text-body-secondary">prima visita</p>
+    {% endif %}
+
+    <ol class="list-unstyled">
+      {% for touch in card.touches.all %}
+        <li>{{ touch.touched_at }}</li>
+      {% endfor %}
+    </ol>
+  </main>
+{% endblock %}

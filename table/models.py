@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db import models
 from django.db.models import F, Q
 from django.db.models.lookups import Exact
@@ -51,6 +52,26 @@ class Card(models.Model):
     @property
     def svg_path(self):
         return f'img/svg/{self.slug}.svg'
+
+    def touch(self):
+        """
+        Record today's touch for this card.
+
+        Only one touch per day counts: if the card was already touched today
+        (in the local time zone), the existing touch is kept unchanged.
+        Nothing is recorded from settings.GAME_END onwards.
+        """
+        today = timezone.localdate()
+        if today >= settings.GAME_END:
+            return
+        self.touches.get_or_create(day=today)
+
+    def update_last_seen(self):
+        """
+        Store the current moment as the last time this card's table was seen.
+        """
+        self.last_seen_at = timezone.now()
+        self.save(update_fields=['last_seen_at'])
 
 
 class Touch(models.Model):
