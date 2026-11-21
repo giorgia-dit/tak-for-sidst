@@ -1,35 +1,36 @@
-from django.db.models import Min
-from django.utils import timezone
-from django.views.generic import ListView, DetailView
+from django.views.generic import DetailView, ListView
 
-from .models import Card, Touch
+from .models import Card
+from .viewmixins import TableDataContextMixin
 
 __all__ = [
-    'CardListView',
-    'CardDetailView'
+    'CardDetailView',
+    'CardListView'
 ]
 
 
-class CardListView(ListView):
-    queryset = Card.objects.annotate(first_touched_at=Min('touches__touched_at'))
+class CardListView(TableDataContextMixin, ListView):
+    model = Card
     template_name = 'table/cards.html'
 
 
-class CardDetailView(DetailView):
+class CardDetailView(TableDataContextMixin, DetailView):
     model = Card
     slug_field = 'token'
     slug_url_kwarg = 'token'
     template_name = 'table/card.html'
 
-    def get(self, request, *args, **kwargs):
-        response = super().get(request, *args, **kwargs)
-        # super().get() builds the context - so previous_seen_at is already saved
-        self.object.touch()
-        self.object.update_last_seen()
-        return response
+    def get_table_data(self):
+        data = super().get_table_data()
+        data['card_seat'] = self.object.seat
+        data['card_previous_seen_at'] = self.object.last_seen_at
+        return data
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['previous_seen_at'] = self.object.last_seen_at
-        return context
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        self.object.touch()
+        context = self.get_context_data(object=self.object)
+
+        self.object.update_last_seen()
+        return self.render_to_response(context)
     

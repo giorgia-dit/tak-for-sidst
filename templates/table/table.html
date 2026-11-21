@@ -1,0 +1,10 @@
+<div class="seats">
+  {% for card in table_cards %}
+    <button type="button"
+            class="seat seat-{{ card.seat_table_side }}{% if not card.first_touched_at %} text-body-secondary{% endif %}"
+            style="grid-row: {{ card.seat_table_row }};"
+            data-seat="{{ card.seat }}">
+      {{ card.name|lower }}
+    </button>
+  {% endfor %}
+</div>

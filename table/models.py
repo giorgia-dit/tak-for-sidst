@@ -26,7 +26,7 @@ class Card(models.Model):
     last_seen_at = models.DateTimeField(null=True, blank=True, editable=False)
 
     class Meta:
-        ordering = ['seat']
+        ordering = ['seat']  
         constraints = [
             models.CheckConstraint(
                 condition=Q(seat__range=(1, 30)),
@@ -54,17 +54,18 @@ class Card(models.Model):
         return f'img/svg/{self.slug}.svg'
 
     def touch(self):
-        """
-        Record today's touch for this card.
+        """Record today's touch for this card.
 
         Only one touch per day counts: if the card was already touched today
         (in the local time zone), the existing touch is kept unchanged.
         Nothing is recorded from settings.GAME_END onwards.
+
+        Return a (touch, created) tuple; touch is None once the game is over.
         """
         today = timezone.localdate()
         if today >= settings.GAME_END:
-            return
-        self.touches.get_or_create(day=today)
+            return None, False
+        return self.touches.get_or_create(day=today)
 
     def update_last_seen(self):
         """
@@ -72,6 +73,18 @@ class Card(models.Model):
         """
         self.last_seen_at = timezone.now()
         self.save(update_fields=['last_seen_at'])
+
+    @property
+    def seat_table_side(self):
+        """Return table side of card seat: 'left' for seats 23-30 and 1-7, 'right' otherwise."""
+        return 'left' if self.seat >= 23 or self.seat <= 7 else 'right'
+
+    @property
+    def seat_table_row(self):
+        """Return table row of card seat, 1-15 from the top. Facing seats share the row."""
+        if self.seat_table_side == 'left':
+            return (self.seat - 23) % 30 + 1
+        return 23 - self.seat
 
 
 class Touch(models.Model):
