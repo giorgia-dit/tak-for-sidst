@@ -1,0 +1,14 @@
+<div class="modal-dialog modal-dialog-centered {% block modal_css_classes %}{% endblock %}">
+  <div class="modal-content">
+    <div class="modal-header border-0">
+      {% block modal_header %}
+        <button type="button" class="btn-close ms-auto" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+      {% endblock %}
+    </div>
+    {% block modal_content %}
+      <div class="modal-body">
+        {% block modal_body %}{% endblock %}
+      </div>
+    {% endblock %}
+  </div>
+</div>

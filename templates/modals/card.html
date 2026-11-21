@@ -1,0 +1,6 @@
+{% extends 'modals/base.html' %}
+{% load static %}
+
+{% block modal_body %}
+  <img src="{% static card.svg_path %}" class="img-fluid" alt="{{ card.name|lower }}: {{ card.description }}">
+{% endblock %}

@@ -5,7 +5,8 @@ from .viewmixins import TableDataContextMixin
 
 __all__ = [
     'CardDetailView',
-    'CardListView'
+    'CardListView',
+    'CardTouchView',
 ]
 
 
@@ -14,7 +15,14 @@ class CardListView(TableDataContextMixin, ListView):
     template_name = 'table/cards.html'
 
 
-class CardDetailView(TableDataContextMixin, DetailView):
+class CardDetailView(DetailView):
+    model = Card
+    slug_field = 'seat'
+    slug_url_kwarg = 'seat'
+    template_name = 'modals/card.html'
+
+
+class CardTouchView(TableDataContextMixin, DetailView):
     model = Card
     slug_field = 'token'
     slug_url_kwarg = 'token'

@@ -3,9 +3,13 @@
 
   {% for card in table_cards %}
     <button type="button"
-            class="seat seat-{{ card.seat_table_side }} position-relative{% if not card.first_touched_at %} text-body-secondary{% endif %}"
-            style="grid-row: {{ card.seat_table_row }};"
-            data-seat="{{ card.seat }}">
+        class="seat seat-{{ card.seat_table_side }} position-relative{% if not card.first_touched_at %} text-body-secondary{% endif %}"
+        style="grid-row: {{ card.seat_table_row }};"
+        data-seat="{{ card.seat }}"
+        hx-get="{% url 'table:card_detail' card.seat %}"
+        hx-target="#modal"
+        data-bs-toggle="modal"
+        data-bs-target="#modal">
       {{ card.name|lower }}
     </button>
   {% endfor %}
@@ -22,8 +26,8 @@
         Ogni volta che tocchi la tua carta ti siedi a tavola, e i quattro fili crescono dei tuoi punti.
         Vale un tocco al giorno: torna quando vuoi a vedere chi è passato.
       </p>
+      <p class="small text-body-secondary mt-5">tocca per entrare</p>
     {% endif %}
 
-    <p class="small text-body-secondary mt-5">tocca per entrare</p>
   </div>
 {% endif %}

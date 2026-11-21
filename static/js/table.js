@@ -250,14 +250,20 @@ function resize() {
   seatPoints = measureSeats(table);
 }
 
-// monitor intro: closing it starts the replay
+// set intro: closed by a tap on the first visit, by itself on later visits
+// closing it starts the replay; without it, the replay starts at once
 const intro = document.getElementById('intro');
+
+function closeIntro() {
+  if (replayStart !== null) return;
+  intro.classList.remove('show');
+  intro.addEventListener('transitionend', () => { intro.hidden = true; }, { once: true });
+  replayStart = performance.now() / 1000;
+}
+
 if (intro) {
-  intro.addEventListener('click', () => {
-    intro.classList.remove('show');
-    intro.addEventListener('transitionend', () => { intro.hidden = true; }, { once: true });
-    replayStart = performance.now() / 1000;
-  }, { once: true });
+  intro.addEventListener('click', closeIntro);
+  if (data.card_previous_seen_at) setTimeout(closeIntro, 2500);
 } else {
   replayStart = performance.now() / 1000;
 }
