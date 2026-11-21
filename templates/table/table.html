@@ -1,7 +1,9 @@
-<div class="seats">
+<div class="seats position-relative">
+  <canvas class="position-absolute top-0 start-0 w-100 h-100 pe-none" aria-hidden="true"></canvas>
+
   {% for card in table_cards %}
     <button type="button"
-            class="seat seat-{{ card.seat_table_side }}{% if not card.first_touched_at %} text-body-secondary{% endif %}"
+            class="seat seat-{{ card.seat_table_side }} position-relative{% if not card.first_touched_at %} text-body-secondary{% endif %}"
             style="grid-row: {{ card.seat_table_row }};"
             data-seat="{{ card.seat }}">
       {{ card.name|lower }}

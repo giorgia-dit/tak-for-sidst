@@ -1,7 +1,8 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
-  <main class="container py-5">
+  <main class="container-fluid p-4">
     <h1 class="display-4">{{ card.name|lower }}</h1>
 
     {% if table_data.card_previous_seen_at %}
@@ -14,4 +15,8 @@
   </main>
 
   {{ table_data|json_script:'table-data' }}
+{% endblock %}
+
+{% block extra_js %}
+  <script src="{% static 'js/table.js' %}"></script>
 {% endblock %}
