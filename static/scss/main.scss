@@ -29,3 +29,14 @@
   grid-column: 3;
   text-align: start;
 }
+
+
+/* utils */
+
+.text-justify {
+  text-align: justify;
+}
+
+.bg-opacity-90 {
+  --bs-bg-opacity: 0.90;
+}

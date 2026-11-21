@@ -15,19 +15,24 @@
   {% endfor %}
 </div>
 
-{% if show_intro %}
-  <div id="intro" class="position-fixed top-0 start-0 w-100 h-100 z-3 bg-body d-flex flex-column justify-content-center align-items-center text-center bg-opacity-75 p-4 fade show"
-      role="button" tabindex="0">
-    <h1 class="display-3">tak for sidst</h1>
-    <p class="text-body-secondary">grazie per l'ultima volta</p>
+{% if 1 or show_intro %}
+  <div id="intro" class="position-fixed top-0 start-0 w-100 h-100 z-3 bg-body bg-opacity-90 5 d-flex overflow-auto p-4 fade show"
+     role="button" tabindex="0">
+    <div class="row justify-content-center w-100 m-auto">
+      <div class="col-12 col-md-8 col-lg-6 text-center">
+        <h1 class="display-3">tak for sidst</h1>
 
-    {% if table_data.card_seat and not table_data.card_previous_seen_at %}
-      <p class="mt-4" style="max-width: 32rem;">
-        Ogni volta che tocchi la tua carta ti siedi a tavola, e i quattro fili crescono dei tuoi punti.
-        Vale un tocco al giorno: torna quando vuoi a vedere chi è passato.
-      </p>
-      <p class="small text-body-secondary mt-5">tocca per entrare</p>
-    {% endif %}
-
+        {% if 1 or table_data.card_seat and not table_data.card_previous_seen_at %}
+          <div class="text-justify fw-light mt-4">
+            <p>tra le isole del nord, <em>tak for sidst</em> è quel che si dice quando si rivede qualcuno con cui si è passato del tempo: è un modo per dire grazie per l'ultima volta che si è stati insieme.</p>
+            <p>si dice appena ci si ritrova, spesso ancor prima di salutarsi. e l'ultima volta può essere un qualunque momento, che sia un giorno, una settimana o mesi prima.</p>
+            <p>è un grazie rimandato, non dimenticato. racconta che non siamo solo il tempo che c'è: siamo tutto quello che c'è già stato.</p>
+            <p>se questo natale ci sedessimo ad un tavolo, festeggerei questo: il tempo nel mezzo, quello che aspettiamo per ritrovarci, quello in cui sappiamo meglio quanto è bello stare insieme. il tempo in cui ci manchiamo, perché è quello in cui più ostinatamente cerchiamo di restare vicini.</p>
+            <p>allora benvenuti, prendete posto e <em>tak for sidst</em>!</p>
+          </div>
+          <p class="small text-body-secondary mt-5">tocca per entrare nella stanza</p>
+        {% endif %}
+      </div>
+    </div>
   </div>
 {% endif %}
