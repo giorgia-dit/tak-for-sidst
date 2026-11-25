@@ -1,5 +1,0 @@
-[lint]
-ignore = ['RUF012']
-
-[format]
-quote-style = 'single'
