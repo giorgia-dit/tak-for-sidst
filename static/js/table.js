@@ -157,8 +157,8 @@ function drawTable() {
 // draw threads: one lane per score, length proportional to its total
 function drawThreads(time) {
   const lane = table.width / (SCORES.length + 1);
-    ctx.lineWidth = 2;
-  ctx.lineCap = 'round';
+    ctx.lineWidth = 10;
+  ctx.lineCap = 'square';
   ctx.lineJoin = 'round';
 
   SCORES.forEach((score, index) => {

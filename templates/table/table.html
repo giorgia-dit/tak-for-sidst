@@ -15,14 +15,14 @@
   {% endfor %}
 </div>
 
-{% if 1 or show_intro %} {# remove 1 #}
+{% if show_intro %} {# TODO remove 1 #}
   <div id="intro" class="position-fixed top-0 start-0 w-100 h-100 z-3 bg-body bg-opacity-90 5 d-flex overflow-auto p-4 fade show"
      role="button" tabindex="0">
     <div class="row justify-content-center w-100 m-auto">
       <div class="col-12 col-md-8 col-lg-6 text-center">
         <h1 class="display-3">tak for sidst</h1>
 
-        {% if 1 or table_data.card_seat and not table_data.card_previous_seen_at %} {# remove 1 #}
+        {% if table_data.card_seat and not table_data.card_previous_seen_at %} {# TODO remove 1 #}
           <div class="text-justify fw-light mt-4">
             <p>tra le isole del nord, <em>tak for sidst</em> è quel che si dice quando si rivede qualcuno con cui si è passato del tempo: è un modo per dire grazie per l'ultima volta che si è stati insieme.</p>
             <p>si dice appena ci si ritrova, spesso ancor prima di salutarsi. e l'ultima volta può essere un qualunque momento, che sia un giorno, una settimana o mesi prima.</p>
