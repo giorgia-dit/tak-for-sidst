@@ -1,6 +1,19 @@
+from django.conf import settings
 from django.db.models import F, Min
+from django.utils import timezone
 
 from .models import Card, Touch
+
+
+class GameOnMixin:
+    """Show the placeholder page instead of the table before settings.GAME_START."""
+
+    placeholder_template_name = 'table/placeholder.html'
+
+    def get_template_names(self):
+        if timezone.localdate() < settings.GAME_START:
+            return [self.placeholder_template_name]
+        return super().get_template_names()
 
 
 class TableDataContextMixin:

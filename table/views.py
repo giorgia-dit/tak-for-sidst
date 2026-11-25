@@ -1,7 +1,7 @@
 from django.views.generic import DetailView, ListView
 
 from .models import Card, Touch
-from .viewmixins import TableDataContextMixin
+from .viewmixins import TableDataContextMixin, GameOnMixin
 
 __all__ = [
     'CardDetailView',
@@ -10,7 +10,7 @@ __all__ = [
 ]
 
 
-class CardListView(TableDataContextMixin, ListView):
+class CardListView(GameOnMixin, TableDataContextMixin, ListView):
     model = Card
     template_name = 'table/cards.html'
 
@@ -22,7 +22,7 @@ class CardDetailView(DetailView):
     template_name = 'modals/card.html'
 
 
-class CardTouchView(TableDataContextMixin, DetailView):
+class CardTouchView(GameOnMixin, TableDataContextMixin, DetailView):
     model = Card
     slug_field = 'token'
     slug_url_kwarg = 'token'

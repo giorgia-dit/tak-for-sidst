@@ -58,19 +58,22 @@ class Card(models.Model):
 
         Only one touch per day counts: if the card was already touched today
         (in the local time zone), the existing touch is kept unchanged.
-        Nothing is recorded from settings.GAME_END onwards.
+        Touches count from settings.GAME_START until the day before settings.GAME_END.
 
-        Return a (touch, created) tuple; touch is None once the game is over.
+        Return a (touch, created) tuple, like get_or_create(); touch is None outside the game dates.
         """
         today = timezone.localdate()
-        if today >= settings.GAME_END:
+        if not settings.GAME_START <= today < settings.GAME_END:
             return None, False
         return self.touches.get_or_create(day=today)
 
     def update_last_seen(self):
+        """Store the current moment as the last time this card's table was seen.
+
+        Visits before settings.GAME_START are not stored, so the first real visit stays the first.
         """
-        Store the current moment as the last time this card's table was seen.
-        """
+        if timezone.localdate() < settings.GAME_START:
+            return
         self.last_seen_at = timezone.now()
         self.save(update_fields=['last_seen_at'])
 
