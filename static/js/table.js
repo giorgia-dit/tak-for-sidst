@@ -12,7 +12,7 @@ const SCORES = ['snak', 'gejst', 'undren', 'minder'];
 const FULL_ROUNDS = 2; //  number of full rounds of touches filling quality lines
 const TOUCH_INTERVAL = 1.2; // secs between two touches
 const TRAIL_INTERVAL = 0.18; // secs between two points of the same score
-const TRAIL_DURATION = 1.6; // secs from the seat to the thread
+const TRAIL_DURATION = 1.0; // secs from the seat to the thread
 
 
 // COMPUTATIONS
@@ -114,6 +114,7 @@ const trails = replay.flatMap((touch, touchIndex) => {
     })),
   );
 });
+const replayEnd = trails.length ? Math.max(...trails.map((trail) => trail.start)) + TRAIL_DURATION : 0; // when the last trail reaches its thread
 const litAt = new Map(seenTouches.map((touch) => [touch.seat, -Infinity])); // time each seat lights up: 0 if seated, its first replayed touch otherwise
 let replayStart = null; // set when the intro closes; the replay runs from then
 replay.forEach((touch, touchIndex) => {
@@ -150,6 +151,7 @@ function update(time) {
 // The page scrolls to the seat of each replayed touch, until the user scrolls by themselves.
 let follow = true;
 let followed = -1;
+let followedEnd = false;
 
 function stopFollowing(event) {
   if (intro && intro.contains(event.target)) return;
@@ -162,6 +164,14 @@ for (const type of ['wheel', 'touchstart', 'keydown']) {
 
 function followReplay(elapsed) {
   const touchIndex = Math.floor(elapsed / TOUCH_INTERVAL);
+  // st the end of the replay, back to the tip of the longest thread
+  if (follow && trails.length && !followedEnd && elapsed >= replayEnd) {
+    followedEnd = true;
+    const longest = Math.max(...SCORES.map((score) => Math.min(totals[score] / full, 1)));
+    const tipY = seats.getBoundingClientRect().top + window.scrollY + table.y + longest * table.height;
+    window.scrollTo({ top: tipY - window.innerHeight / 2, behavior: 'smooth' });
+    return;
+  }
   if (!follow || touchIndex <= followed || touchIndex >= replay.length) return;
   followed = touchIndex;
 
@@ -299,13 +309,14 @@ const intro = document.getElementById('intro');
 function closeIntro() {
   if (replayStart !== null) return;
   intro.classList.remove('show');
-  intro.addEventListener('transitionend', () => { intro.hidden = true; }, { once: true });
+  intro.classList.add('pe-none');
+  intro.addEventListener('transitionend', () => intro.classList.replace('d-flex', 'd-none'), { once: true });
   replayStart = performance.now() / 1000;
 }
 
 if (intro) {
   intro.addEventListener('click', closeIntro);
-  if (data.card_previous_seen_at) setTimeout(closeIntro, 2500);
+  if (data.card_previous_seen_at) setTimeout(closeIntro, 1200);
 } else {
   replayStart = performance.now() / 1000;
 }

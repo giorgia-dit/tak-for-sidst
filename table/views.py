@@ -1,4 +1,4 @@
-from django.views.generic import DetailView, ListView
+from django.views.generic import DetailView, ListView, TemplateView
 
 from .models import Card, Touch
 from .viewmixins import TableDataContextMixin, GameOnMixin
@@ -7,6 +7,7 @@ __all__ = [
     'CardDetailView',
     'CardListView',
     'CardTouchView',
+    'HelpView',
 ]
 
 
@@ -50,4 +51,7 @@ class CardTouchView(GameOnMixin, TableDataContextMixin, DetailView):
 
         self.object.update_last_seen()
         return self.render_to_response(context)
-    
+
+
+class HelpView(TemplateView):
+    template_name = 'modals/help.html'

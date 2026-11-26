@@ -1,0 +1,15 @@
+{% extends 'modals/base.html' %}
+
+{% block modal_header %}
+    <div class="modal-header border-0">
+        <h2 class="modal-title h5">come si gioca</h2>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+    </div>
+    <div class="ornament mx-3 my-1"></div>
+{% endblock %}
+
+{% block modal_body %}
+    <div class="text-center fw-light">
+        {% include 'table/instructions.html' %}
+    </div>
+{% endblock %}

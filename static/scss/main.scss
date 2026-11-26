@@ -22,7 +22,7 @@
 }
 
 .seat {
-  padding: 3rem 0 0;
+  padding: 0 0 3rem;
   border: 0;
   background: none;
   color: inherit;
@@ -38,6 +38,29 @@
   grid-column: 3;
 }
 
+.seat-inline {
+  display: inline-block;
+  width: 0.5em;
+  height: 0.5em;
+  border-radius: 50%;
+  background: $text-muted;
+  box-shadow: 0 0 0.6em 0.3em rgba($text-muted, 0.35);
+  vertical-align: 0.1em;
+  margin: 0 0.5rem 0 0.5rem;
+}
+
+.seat-name {
+  white-space: nowrap;
+}
+
+.seat-left .seat-name {
+  transform: rotate(-25deg);
+}
+
+.seat-right .seat-name {
+  transform: rotate(25deg);
+}
+
 .symbols-lanes {
   grid-column: 2;
   display: grid;
@@ -49,6 +72,11 @@
   height: 1.5rem;
 }
 
+.ornament {
+  height: 6px;
+  background: repeating-linear-gradient(-45deg, $brick-red 0 1px, transparent 1px 6px);
+}
+
 
 /* utils */
 
@@ -56,6 +84,16 @@
   text-align: justify;
 }
 
+.signature-text {
+  font-family: 'Edu AU VIC WA NT Pre', serif;
+}
+
 .bg-opacity-90 {
   --bs-bg-opacity: 0.90;
+}
+
+.inline-symbol {
+  height: 1em;
+  vertical-align: -0.15em;
+  padding: 0 0.25rem 0 0.25rem;
 }

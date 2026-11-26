@@ -1,6 +1,14 @@
 {% load static %}
 
-<div class="text-center mb-5">
+<div class="text-center mb-5 position-relative">
+    <button type="button"
+            class="btn btn-sm btn-outline-secondary rounded-circle position-absolute top-0 end-0"
+            hx-get="{% url 'table:help' %}"
+            hx-target="#modal"
+            data-bs-toggle="modal"
+            data-bs-target="#modal">
+        ?
+    </button>
     <h1 class="display-5 mb-1">tak for sidst</h1>
     <p class="small text-body-secondary">
         {% if table_waiting_count %}
@@ -25,14 +33,14 @@
 
     {% for card in table_cards %}
         <button type="button"
-                class="seat seat-{{ card.seat_table_side }} position-relative{% if not card.first_touched_at %} text-body-secondary{% endif %}"
+                class="seat seat-{{ card.seat_table_side }} position-relative{% if not card.first_touched_at %} opacity-50{% endif %}"
                 style="grid-row: {{ card.seat_table_row }};"
                 data-seat="{{ card.seat }}"
                 hx-get="{% url 'table:card_detail' card.seat %}"
                 hx-target="#modal"
                 data-bs-toggle="modal"
                 data-bs-target="#modal">
-            {{ card.name|lower }}
+            <span class="seat-name d-inline-block">{{ card.name|lower }}</span>
         </button>
     {% endfor %}
 </div>
@@ -47,20 +55,10 @@
 
                 {% if table_data.card_seat and not table_data.card_previous_seen_at %} {# TODO remove 1 #}
                     <div class="text-justify fw-light mt-4">
-                        <p>tra le isole del nord, <em>tak for sidst</em> è quel che si dice quando si rivede qualcuno
-                            con cui si è passato del tempo: è un modo per dire grazie per l'ultima volta che si è stati
-                            insieme.</p>
-                        <p>si dice appena ci si ritrova, spesso ancor prima di salutarsi. e l'ultima volta può essere un
-                            qualunque momento, che sia un giorno, una settimana o mesi prima.</p>
-                        <p>è un grazie rimandato, non dimenticato. racconta che non siamo solo il tempo che c'è: siamo
-                            tutto quello che c'è già stato.</p>
-                        <p>a questa tavola, questo natale, vorrei festeggiare questo: il tempo nel mezzo, quello
-                            che aspettiamo per ritrovarci, quello in cui sappiamo meglio quanto è bello stare insieme.
-                            il tempo in cui ci manchiamo, perché è quello in cui più ostinatamente cerchiamo di restare
-                            vicini.</p>
-                        <p>allora benvenuti, prendete posto e <em>tak for sidst</em>!</p>
+                        <p class="h5 mb-4">ce l'hai fatta! il lasciapassare ha funzionato.</p>
+                        {% include 'table/instructions.html' %}
                     </div>
-                    <p class="small text-body-secondary mt-5">tocca per sederti</p>
+                    <p class="small fw-light text-muted mt-5">tocca per sederti</p>
                 {% endif %}
             </div>
         </div>
