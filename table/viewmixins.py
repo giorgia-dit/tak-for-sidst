@@ -27,6 +27,9 @@ class TableDataContextMixin:
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['table_cards'] = Card.objects.annotate(first_touched_at=Min('touches__touched_at'))
+        cards = Card.objects.annotate(first_touched_at=Min('touches__touched_at'))
+        context['table_cards'] = cards
+        context['table_seated_count'] = cards.filter(first_touched_at__isnull=False).count()
+        context['table_waiting_count'] = cards.count() - context['table_seated_count']
         context['table_data'] = self.get_table_data()
         return context

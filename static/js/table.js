@@ -59,15 +59,14 @@ function tableRect() {
   return { x: left + gap, y: 0, width: middle, height: seats.clientHeight };
 }
 
-// return map of positions where each seat meets the table edge, keyed by seat number (e.g. 26 → { x: 120, y: 310 })
-function measureSeats(table) {
+// return map of positions of seats, keyed by seat number (e.g. 26 → { x: 120, y: 310 })
+function measureSeats() {
   const origin = seats.getBoundingClientRect();
   const points = new Map();
   for (const button of seats.querySelectorAll('[data-seat]')) {
     const rect = button.getBoundingClientRect();
-    const isLeft = rect.left < origin.left + table.x;
     points.set(Number(button.dataset.seat), {
-      x: isLeft ? table.x : table.x + table.width,
+      x: rect.left - origin.left + rect.width / 2,
       y: rect.top - origin.top + rect.height / 2,
     });
   }
@@ -76,15 +75,15 @@ function measureSeats(table) {
 
 // return horizontal offset of a thread at u (0-1 along the table) in lane widths
 function wobble(u, index, time) {
-  return Math.sin(u * 16 + time * 0.7 + index * 1.7) * 0.12
-    + Math.sin(u * 5 - time * 0.4 + index) * 0.08;
+  return Math.sin(u * 16 + time * 0.7 + index * 1.7) * 0.06
+    + Math.sin(u * 5 - time * 0.4 + index) * 0.04;
 }
 
 // return position of the thread of the score at index, at u (0-1 along the table)
 function threadPoint(index, u, time) {
-  const lane = table.width / (SCORES.length + 1);
+  const lane = table.width / SCORES.length;
   return {
-    x: table.x + lane * (index + 1) + wobble(u, index, time) * lane,
+    x: table.x + lane * (index + 0.5) + wobble(u, index, time) * lane,
     y: table.y + u * table.height,
   };
 }
@@ -122,10 +121,11 @@ replay.forEach((touch, touchIndex) => {
 });
 const full = fullLength();
 const colors = {
-    table: color('--bs-secondary-bg'),
-    glow: color('--bs-body-color-rgb'),
+    table: color('--bs-surface'),
+    glow: color('--bs-text-muted-rgb'),
     ...Object.fromEntries(SCORES.map((score) => [score, color(`--bs-${score}`)])),
 };
+const scoreRgb = Object.fromEntries(SCORES.map((score) => [score, color(`--bs-${score}-rgb`)]));
 
 // layout-dependent, updated by resize()
 let table = tableRect();
@@ -145,20 +145,46 @@ function update(time) {
 }
 
 
+// FOLLOW
+
+// The page scrolls to the seat of each replayed touch, until the user scrolls by themselves.
+let follow = true;
+let followed = -1;
+
+function stopFollowing(event) {
+  if (intro && intro.contains(event.target)) return;
+  follow = false;
+}
+
+for (const type of ['wheel', 'touchstart', 'keydown']) {
+  window.addEventListener(type, stopFollowing, { passive: true });
+}
+
+function followReplay(elapsed) {
+  const touchIndex = Math.floor(elapsed / TOUCH_INTERVAL);
+  if (!follow || touchIndex <= followed || touchIndex >= replay.length) return;
+  followed = touchIndex;
+
+  const button = seats.querySelector(`[data-seat="${replay[touchIndex].seat}"]`);
+  const rect = button.getBoundingClientRect();
+  if (rect.top < 0 || rect.bottom > window.innerHeight) {
+    button.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+}
+
+
 // DRAWING
 
 function drawTable() {
   ctx.fillStyle = colors.table;
   ctx.beginPath();
-  ctx.roundRect(table.x, table.y, table.width, table.height, table.width * 0.15);
+  ctx.roundRect(table.x, table.y, table.width, table.height, 12);
   ctx.fill();
 }
 
 // draw threads: one lane per score, length proportional to its total
 function drawThreads(time) {
-  const lane = table.width / (SCORES.length + 1);
-    ctx.lineWidth = 10;
-  ctx.lineCap = 'square';
+  ctx.lineCap = 'round';
   ctx.lineJoin = 'round';
 
   SCORES.forEach((score, index) => {
@@ -166,14 +192,28 @@ function drawThreads(time) {
     if (!progress) return;
 
     const steps = Math.max(2, Math.round(60 * progress));
-    ctx.strokeStyle = colors[score];
     ctx.beginPath();
     for (let step = 0; step <= steps; step++) {
       const point = threadPoint(index, (step / steps) * progress, time);
       if (step === 0) ctx.moveTo(point.x, point.y);
       else ctx.lineTo(point.x, point.y);
     }
-    ctx.stroke();
+
+    // Same path stroked three times: wide and faint, then narrower and brighter.
+    ctx.strokeStyle = colors[score];
+    for (const [width, alpha] of [[12, 0.06], [7, 0.14], [4, 0.45]]) {
+      ctx.lineWidth = width;
+      ctx.globalAlpha = alpha;
+      ctx.stroke();
+    }
+    ctx.globalAlpha = 1;
+
+    const tip = threadPoint(index, progress, time);
+    const glow = ctx.createRadialGradient(tip.x, tip.y, 0, tip.x, tip.y, 10);
+    glow.addColorStop(0, `rgba(${scoreRgb[score]}, 0.7)`);
+    glow.addColorStop(1, `rgba(${scoreRgb[score]}, 0)`);
+    ctx.fillStyle = glow;
+    ctx.fillRect(tip.x - 10, tip.y - 10, 20, 20);
   });
 }
 
@@ -210,22 +250,24 @@ function drawTrails(time, elapsed) {
   ctx.globalAlpha = 1;
 }
 
-// draw seats: a warm glow fading in when someone first sits, stronger for the own seat
+// draw seats: a lamp per seat, lit with a fade when someone first sits; larger for the own seat.
 function drawSeats(elapsed) {
-  for (const [seat, start] of litAt) {
-    const light = Math.min(Math.max((elapsed - start) / 1.4, 0), 1);
-    if (!light) continue;
+  for (const [seat, point] of seatPoints) {
+    const start = litAt.get(seat);
+    const light = start === undefined ? 0 : Math.min(Math.max((elapsed - start) / 1.4, 0), 1);
+    const radius = seat === data.card_seat ? 32 : 30;
 
-    const point = seatPoints.get(seat);
-    const own = seat === data.card_seat;
-    const radius = own ? 36 : 24;
-    const alpha = (own ? 0.5 : 0.3) * light;
-
-    const glow = ctx.createRadialGradient(point.x, point.y, 0, point.x, point.y, radius);
-    glow.addColorStop(0, `rgba(${colors.glow}, ${alpha})`);
-    glow.addColorStop(1, `rgba(${colors.glow}, 0)`);
-    ctx.fillStyle = glow;
+    const halo = ctx.createRadialGradient(point.x, point.y, 0, point.x, point.y, radius);
+    halo.addColorStop(0, `rgba(${colors.glow}, ${0.55 * light})`);
+    halo.addColorStop(0.35, `rgba(${colors.glow}, ${0.22 * light})`);
+    halo.addColorStop(1, `rgba(${colors.glow}, 0)`);
+    ctx.fillStyle = halo;
     ctx.fillRect(point.x - radius, point.y - radius, radius * 2, radius * 2);
+
+    ctx.fillStyle = `rgba(${colors.glow}, ${0.2 + 0.7 * light})`;
+    ctx.beginPath();
+    ctx.arc(point.x, point.y, 10, 0, Math.PI * 2);
+    ctx.fill();
   }
 }
 
@@ -272,6 +314,7 @@ function frame(now) {
   const time = now / 1000;
   const elapsed = replayStart === null ? -1 : time - replayStart;
   update(elapsed);
+  followReplay(elapsed);
   draw(time, elapsed);
   requestAnimationFrame(frame);
 }

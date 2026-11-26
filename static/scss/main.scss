@@ -5,29 +5,48 @@
 
 /* table */
 
-.seats {
+.seats,
+.symbols {
   display: grid;
-  grid-template-columns: 1fr minmax(4rem, 30%) 1fr;
+  grid-template-columns: 3.75rem 1fr 3.75rem;
+  @include media-breakpoint-up(md) {
+    grid-template-columns: 4.5rem 1fr 4.5rem;
+  }
+  column-gap: 0.5rem;
+  max-width: 36rem;
+  margin-inline: auto;
+}
+
+.seats {
   grid-auto-rows: max(4rem, 12svh);
-  column-gap: 1rem;
 }
 
 .seat {
-  padding: 0;
+  padding: 3rem 0 0;
   border: 0;
   background: none;
   color: inherit;
   font-family: $font-serif;
+  font-size: 0.75rem;
 }
 
 .seat-left {
   grid-column: 1;
-  text-align: end;
 }
 
 .seat-right {
   grid-column: 3;
-  text-align: start;
+}
+
+.symbols-lanes {
+  grid-column: 2;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  justify-items: center;
+}
+
+.symbols-lanes img {
+  height: 1.5rem;
 }
 
 

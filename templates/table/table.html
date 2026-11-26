@@ -1,38 +1,68 @@
-<div class="seats position-relative">
-  <canvas class="position-absolute top-0 start-0 w-100 h-100 pe-none" aria-hidden="true"></canvas>
+{% load static %}
 
-  {% for card in table_cards %}
-    <button type="button"
-        class="seat seat-{{ card.seat_table_side }} position-relative{% if not card.first_touched_at %} text-body-secondary{% endif %}"
-        style="grid-row: {{ card.seat_table_row }};"
-        data-seat="{{ card.seat }}"
-        hx-get="{% url 'table:card_detail' card.seat %}"
-        hx-target="#modal"
-        data-bs-toggle="modal"
-        data-bs-target="#modal">
-      {{ card.name|lower }}
-    </button>
-  {% endfor %}
+<div class="text-center mb-5">
+    <h1 class="display-5 mb-1">tak for sidst</h1>
+    <p class="small text-body-secondary">
+        {% if table_waiting_count %}
+            aspettiamo ancora: {{ table_waiting_count }} invitat{{ table_waiting_count|pluralize:'o,i' }}
+        {% else %}
+            tutti a tavola
+        {% endif %}
+    </p>
 </div>
 
-{% if show_intro %} {# TODO remove 1 #}
-  <div id="intro" class="position-fixed top-0 start-0 w-100 h-100 z-3 bg-body bg-opacity-90 5 d-flex overflow-auto p-4 fade show"
-     role="button" tabindex="0">
-    <div class="row justify-content-center w-100 m-auto">
-      <div class="col-12 col-md-8 col-lg-6 text-center">
-        <h1 class="display-3">tak for sidst</h1>
-
-        {% if table_data.card_seat and not table_data.card_previous_seen_at %} {# TODO remove 1 #}
-          <div class="text-justify fw-light mt-4">
-            <p>tra le isole del nord, <em>tak for sidst</em> è quel che si dice quando si rivede qualcuno con cui si è passato del tempo: è un modo per dire grazie per l'ultima volta che si è stati insieme.</p>
-            <p>si dice appena ci si ritrova, spesso ancor prima di salutarsi. e l'ultima volta può essere un qualunque momento, che sia un giorno, una settimana o mesi prima.</p>
-            <p>è un grazie rimandato, non dimenticato. racconta che non siamo solo il tempo che c'è: siamo tutto quello che c'è già stato.</p>
-            <p>se questo natale ci sedessimo ad un tavolo, festeggerei questo: il tempo nel mezzo, quello che aspettiamo per ritrovarci, quello in cui sappiamo meglio quanto è bello stare insieme. il tempo in cui ci manchiamo, perché è quello in cui più ostinatamente cerchiamo di restare vicini.</p>
-            <p>allora benvenuti, prendete posto e <em>tak for sidst</em>!</p>
-          </div>
-          <p class="small text-body-secondary mt-5">tocca per entrare nella stanza</p>
-        {% endif %}
-      </div>
+<div class="symbols mb-3" aria-hidden="true">
+    <div class="symbols-lanes">
+        <img src="{% static 'img/svg/snak.svg' %}" alt="">
+        <img src="{% static 'img/svg/gejst.svg' %}" alt="">
+        <img src="{% static 'img/svg/undren.svg' %}" alt="">
+        <img src="{% static 'img/svg/minder.svg' %}" alt="">
     </div>
-  </div>
+</div>
+
+<div class="seats position-relative">
+    <canvas class="position-absolute top-0 start-0 w-100 h-100 pe-none" aria-hidden="true"></canvas>
+
+    {% for card in table_cards %}
+        <button type="button"
+                class="seat seat-{{ card.seat_table_side }} position-relative{% if not card.first_touched_at %} text-body-secondary{% endif %}"
+                style="grid-row: {{ card.seat_table_row }};"
+                data-seat="{{ card.seat }}"
+                hx-get="{% url 'table:card_detail' card.seat %}"
+                hx-target="#modal"
+                data-bs-toggle="modal"
+                data-bs-target="#modal">
+            {{ card.name|lower }}
+        </button>
+    {% endfor %}
+</div>
+
+{% if show_intro %}
+    <div id="intro"
+         class="position-fixed top-0 start-0 w-100 h-100 z-3 bg-body bg-opacity-90 5 d-flex overflow-auto p-4 fade show"
+         role="button" tabindex="0">
+        <div class="row justify-content-center w-100 m-auto">
+            <div class="col-12 col-md-8 col-lg-6 text-center">
+                <h1 class="display-3">tak for sidst</h1>
+
+                {% if table_data.card_seat and not table_data.card_previous_seen_at %} {# TODO remove 1 #}
+                    <div class="text-justify fw-light mt-4">
+                        <p>tra le isole del nord, <em>tak for sidst</em> è quel che si dice quando si rivede qualcuno
+                            con cui si è passato del tempo: è un modo per dire grazie per l'ultima volta che si è stati
+                            insieme.</p>
+                        <p>si dice appena ci si ritrova, spesso ancor prima di salutarsi. e l'ultima volta può essere un
+                            qualunque momento, che sia un giorno, una settimana o mesi prima.</p>
+                        <p>è un grazie rimandato, non dimenticato. racconta che non siamo solo il tempo che c'è: siamo
+                            tutto quello che c'è già stato.</p>
+                        <p>a questa tavola, questo natale, vorrei festeggiare questo: il tempo nel mezzo, quello
+                            che aspettiamo per ritrovarci, quello in cui sappiamo meglio quanto è bello stare insieme.
+                            il tempo in cui ci manchiamo, perché è quello in cui più ostinatamente cerchiamo di restare
+                            vicini.</p>
+                        <p>allora benvenuti, prendete posto e <em>tak for sidst</em>!</p>
+                    </div>
+                    <p class="small text-body-secondary mt-5">tocca per sederti</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
 {% endif %}

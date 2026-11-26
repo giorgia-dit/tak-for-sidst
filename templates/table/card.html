@@ -3,14 +3,12 @@
 
 {% block content %}
   <main class="container-fluid p-4">
-    <h1 class="display-4">hej, {{ card.name|lower }}</h1>
-
     {% if settings.DEBUG %}
-        {% if table_data.card_previous_seen_at %}
+        {% comment %}{% if table_data.card_previous_seen_at %}
           <p class="text-body-secondary">ultima visita: {{ table_data.card_previous_seen_at }}</p>
         {% else %}
           <p class="text-body-secondary">prima visita</p>
-        {% endif %}
+        {% endif %}{% endcomment %}
     {% endif %}
 
     {% include 'table/table.html' %}
